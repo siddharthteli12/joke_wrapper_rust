@@ -1,5 +1,6 @@
 const MAX_AMOUNT_OF_JOKES: i8 = 10;
 const MAX_ID_RANGE: i16 = 1368;
+pub const url: &str = "https://v2.jokeapi.dev/joke/";
 pub enum Category {
     Chirstmas,
     Dark,
@@ -7,6 +8,19 @@ pub enum Category {
     Programming,
     Pun,
     Spooky,
+}
+
+impl ToString for Category {
+    fn to_string(&self) -> String {
+        match self {
+            Category::Chirstmas => String::from("Chirstmas"),
+            Category::Dark => String::from("Dark"),
+            Category::Misc => String::from("Misc"),
+            Category::Programming => String::from("Programming"),
+            Category::Pun => String::from("Pun"),
+            Category::Spooky => String::from("Spooky"),
+        }
+    }
 }
 
 pub enum Language {
@@ -31,6 +45,19 @@ pub enum Flags {
     Racist,
     Sexist,
     Explicit,
+}
+
+impl ToString for Flags {
+    fn to_string(&self) -> String {
+        match self {
+            Flags::Nsfw => String::from("Nsfw"),
+            Flags::Religious => String::from("Religious"),
+            Flags::Political => String::from("Political"),
+            Flags::Racist => String::from("Racist"),
+            Flags::Sexist => String::from("Sexist"),
+            Flags::Explicit => String::from("Explicit"),
+        }
+    }
 }
 
 pub enum ResponseFormat {
