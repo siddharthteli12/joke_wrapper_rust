@@ -85,7 +85,7 @@ impl Default for JokeType {
     }
 }
 
-pub struct AmountOfJokes(i8);
+pub struct AmountOfJokes(pub i8);
 
 impl AmountOfJokes {
     pub fn validate(&self) {
@@ -104,7 +104,7 @@ impl Default for AmountOfJokes {
     }
 }
 
-pub struct IdRange(i16, i16);
+pub struct IdRange(pub i16, pub i16);
 
 impl IdRange {
     pub fn validate(&self) {
