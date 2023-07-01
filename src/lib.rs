@@ -3,7 +3,9 @@ use types::*;
 
 mod utilites;
 use utilites::*;
-struct Joke {
+
+use ureq;
+pub struct Joke {
     category: Vec<Category>,
     language: Language,
     flags: Vec<Flags>,
@@ -88,5 +90,17 @@ impl Joke {
             joke_url.pop();
         }
         joke_url
+    }
+
+    pub fn get_joke(joke_url: &str, standard: bool) -> Result<ReponseType, ureq::Error> {
+        let body: String = ureq::get(joke_url).call()?.into_string()?;
+        if standard {
+            if joke_url.contains("format=") {
+                panic!("Response_format can only be set to json");
+            }
+            Ok(ReponseType::ResponseObject(decode_json_response(body)))
+        } else {
+            Ok(ReponseType::Json(body))
+        }
     }
 }
