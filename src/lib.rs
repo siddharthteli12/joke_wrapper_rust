@@ -1,15 +1,13 @@
-mod types;
+pub mod types;
 use types::*;
 
 mod utilites;
 use utilites::*;
-
-use ureq;
 pub struct Joke {
     category: Vec<Category>,
     language: Language,
     flags: Vec<Flags>,
-    response_format: ResponseFormat,
+    response_format: Format,
     joke_type: JokeType,
     search_string: Option<String>,
     id_range: Option<IdRange>,
@@ -22,7 +20,7 @@ impl Joke {
             category: vec![],
             language: Language::English,
             flags: vec![],
-            response_format: ResponseFormat::default(),
+            response_format: Format::default(),
             joke_type: JokeType::default(),
             search_string: None,
             id_range: None,
@@ -40,7 +38,7 @@ impl Joke {
         self
     }
 
-    pub fn response_format(&mut self, response_format: ResponseFormat) -> &mut Self {
+    pub fn response_format(&mut self, response_format: Format) -> &mut Self {
         self.response_format = response_format;
         self
     }
@@ -90,17 +88,5 @@ impl Joke {
             joke_url.pop();
         }
         joke_url
-    }
-
-    pub fn get_joke(joke_url: &str, standard: bool) -> Result<ReponseType, ureq::Error> {
-        let body: String = ureq::get(joke_url).call()?.into_string()?;
-        if standard {
-            if joke_url.contains("format=") {
-                panic!("Response_format can only be set to json");
-            }
-            Ok(ReponseType::ResponseObject(decode_json_response(body)))
-        } else {
-            Ok(ReponseType::Json(body))
-        }
     }
 }

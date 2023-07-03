@@ -1,5 +1,6 @@
 use crate::types::*;
 use std::vec;
+
 pub fn enum_join<T: ToString>(list_enum: &Vec<T>) -> Vec<String> {
     let mut list_string = vec![];
     for item in list_enum {
@@ -38,12 +39,12 @@ pub fn build_flags(list: &Vec<Flags>, joke_url: &mut String) {
     }
 }
 
-pub fn build_response_format(response: &ResponseFormat, joke_url: &mut String) {
+pub fn build_response_format(response: &Format, joke_url: &mut String) {
     match response {
-        ResponseFormat::Json => {}
-        ResponseFormat::Xml => joke_url.push_str("format=xml&"),
-        ResponseFormat::Yaml => joke_url.push_str("format=yaml&"),
-        ResponseFormat::Text => joke_url.push_str("format=txt&"),
+        Format::Json => {}
+        Format::Xml => joke_url.push_str("format=xml&"),
+        Format::Yaml => joke_url.push_str("format=yaml&"),
+        Format::Text => joke_url.push_str("format=txt&"),
     }
 }
 
