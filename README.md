@@ -1,2 +1,5 @@
 # joke_api_rust
-A wrapper on joke api.
+- Unoffical Rust wrapper for [joke api](https://jokeapi.dev/).
+    - Created just for hands on, still under development.
+    - **Not production ready**
+
