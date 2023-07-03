@@ -1,8 +1,14 @@
+#![allow(dead_code)]
+
 pub mod types;
+use core::panic;
+
 use types::*;
 
 mod utilites;
 use utilites::*;
+
+use ureq;
 pub struct Joke {
     category: Vec<Category>,
     language: Language,
@@ -65,8 +71,8 @@ impl Joke {
         self
     }
 
-    pub fn build(&mut self) -> String {
-        let mut joke_url = String::from(url);
+    pub fn build(&mut self) -> JokeUrl {
+        let mut joke_url = JokeUrl::get_url().0;
 
         build_category(&self.category, &mut joke_url);
 
@@ -87,6 +93,27 @@ impl Joke {
         if joke_url.ends_with('&') || joke_url.ends_with('?') {
             joke_url.pop();
         }
-        joke_url
+        JokeUrl(joke_url)
+    }
+}
+
+pub struct JokeUrl(String);
+
+impl JokeUrl {
+    pub fn get_url() -> Self {
+        JokeUrl("https://v2.jokeapi.dev/joke/".to_string())
+    }
+
+    pub fn get_joke(self, standard: bool) -> Result<ResponseType, ureq::Error> {
+        let body: String = ureq::get(&self.0).call()?.into_string()?;
+        if standard {
+            if self.0.contains("format") {
+                panic!("Format can only set to json when standard flag is true");
+            }
+            let response: StandardResponseType = serde_json::from_str(&body).unwrap();
+            Ok(ResponseType::Standard(response))
+        } else {
+            Ok(ResponseType::Json(body))
+        }
     }
 }
