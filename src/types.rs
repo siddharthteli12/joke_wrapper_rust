@@ -1,6 +1,9 @@
 const MAX_AMOUNT_OF_JOKES: i8 = 10;
 const MAX_ID_RANGE: i16 = 1368;
-pub const url: &str = "https://v2.jokeapi.dev/joke/";
+
+use serde::Deserialize;
+use std::collections::HashMap;
+
 pub enum Category {
     Chirstmas,
     Dark,
@@ -60,16 +63,16 @@ impl ToString for Flags {
     }
 }
 
-pub enum ResponseFormat {
+pub enum Format {
     Json,
     Xml,
     Yaml,
     Text,
 }
 
-impl Default for ResponseFormat {
+impl Default for Format {
     fn default() -> Self {
-        ResponseFormat::Json
+        Format::Json
     }
 }
 
@@ -115,4 +118,57 @@ impl IdRange {
             );
         }
     }
+}
+
+#[derive(Debug, Deserialize)]
+pub enum ResponseType {
+    Json(String),
+    Standard(StandardResponseType),
+}
+
+#[derive(Debug, Deserialize)]
+pub struct StandardResponseType {
+    #[serde(flatten)]
+    #[serde(rename = "type")]
+    pub joketype: JokePart,
+    pub error: bool,
+    pub category: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "type")]
+pub enum JokePart {
+    #[serde(rename = "twopart")]
+    Twopart(MultiplePartJoke),
+    #[serde(rename = "single")]
+    Single(SinglePartJoke),
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MultiplePartJoke {
+    pub setup: String,
+    pub delivery: String,
+    pub flags: StandardFlag,
+    pub id: i16,
+    pub safe: bool,
+    pub lang: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct SinglePartJoke {
+    pub joke: Option<String>,
+    pub flags: HashMap<String, bool>,
+    pub id: i16,
+    pub safe: bool,
+    pub lang: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct StandardFlag {
+    nsfw: bool,
+    religious: bool,
+    political: bool,
+    racist: bool,
+    sexist: bool,
+    explicit: bool,
 }
