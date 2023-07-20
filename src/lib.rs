@@ -3,7 +3,7 @@
 pub mod types;
 use core::panic;
 
-use types::*;
+pub use types::*;
 
 mod utilites;
 use utilites::*;
