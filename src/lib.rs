@@ -60,7 +60,7 @@ impl Joke {
     }
 
     pub fn id_range(&mut self, id_range: IdRange) -> &mut Self {
-        id_range.validate();
+        id_range.validate(&self.language);
         self.id_range = Some(id_range);
         self
     }

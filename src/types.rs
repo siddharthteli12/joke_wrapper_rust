@@ -110,12 +110,24 @@ impl Default for AmountOfJokes {
 pub struct IdRange(pub i16, pub i16);
 
 impl IdRange {
-    pub fn validate(&self) {
+    pub fn validate(&self, language: &Language) {
         if self.0 > self.1 || self.1 > 1368 {
             panic!(
                 "Unexpected id range value, max value allowed is {:}",
                 MAX_ID_RANGE
             );
+        }
+        Self::language_range(self.1, &language);
+    }
+
+    pub fn language_range(id: i16, language: &Language) {
+        match language {
+            Language::Czech => assert!(id <= 3),
+            Language::French => assert!(id <= 999),
+            Language::German => assert!(id <= 35),
+            Language::Portuguese => assert!(id <= 1),
+            Language::Spanish => assert!(id <= 6),
+            _ => {}
         }
     }
 }
