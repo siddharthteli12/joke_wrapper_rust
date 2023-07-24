@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 pub mod types;
+pub mod constants;
 use core::panic;
 
 pub use types::*;
@@ -9,18 +10,18 @@ mod utilites;
 use utilites::*;
 
 use ureq;
-pub struct Joke {
+pub struct Joke<'a> {
     category: Vec<Category>,
     language: Language,
     flags: Vec<Flags>,
     response_format: Format,
     joke_type: JokeType,
-    search_string: Option<String>,
+    search_string: Option<&'a str>,
     id_range: Option<IdRange>,
     amount_of_jokes: AmountOfJokes,
 }
 
-impl Joke {
+impl <'a> Joke<'a> {
     pub fn new() -> Self {
         Self {
             category: vec![],
@@ -54,7 +55,7 @@ impl Joke {
         self
     }
 
-    pub fn search_string(&mut self, search_string: String) -> &mut Self {
+    pub fn search_string(&mut self, search_string:&'a str ) -> &mut Self {
         self.search_string = Some(search_string);
         self
     }
@@ -105,7 +106,7 @@ impl JokeUrl {
     }
 
     pub fn get_joke(self, standard: bool) -> Result<ResponseType, ureq::Error> {
-        let body: String = ureq::get(&self.0).call()?.into_string()?;
+        let body = ureq::get(&self.0).call()?.into_string()?;
         if standard {
             if self.0.contains("format") {
                 panic!("Format can only set to json when standard flag is true");

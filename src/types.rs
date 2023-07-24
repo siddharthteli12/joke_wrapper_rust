@@ -1,9 +1,7 @@
-const MAX_AMOUNT_OF_JOKES: i8 = 10;
-const MAX_ID_RANGE: i16 = 1368;
-
 use serde::Deserialize;
 use std::collections::HashMap;
 
+use crate::constants::*;
 pub enum Category {
     Chirstmas,
     Dark,
@@ -122,11 +120,11 @@ impl IdRange {
 
     pub fn language_range(id: i16, language: &Language) {
         match language {
-            Language::Czech => assert!(id <= 3),
-            Language::French => assert!(id <= 999),
-            Language::German => assert!(id <= 35),
-            Language::Portuguese => assert!(id <= 1),
-            Language::Spanish => assert!(id <= 6),
+            Language::Czech => assert!(id <= language_range::CZECH),
+            Language::French => assert!(id <= language_range::FRENCH),
+            Language::German => assert!(id <= language_range::GERMAN),
+            Language::Portuguese => assert!(id <= language_range::PORTUGUESE),
+            Language::Spanish => assert!(id <= language_range::SPANISH),
             _ => {}
         }
     }

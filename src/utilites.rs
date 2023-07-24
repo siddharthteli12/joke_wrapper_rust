@@ -56,7 +56,7 @@ pub fn build_joke_type(joke_type: &JokeType, joke_url: &mut String) {
     }
 }
 
-pub fn build_search_string(search_string: &Option<String>, joke_url: &mut String) {
+pub fn build_search_string(search_string: &Option<&str>, joke_url: &mut String) {
     if let Some(string) = &search_string {
         if !string.is_empty() {
             let value = format!("contains={}&", string);
