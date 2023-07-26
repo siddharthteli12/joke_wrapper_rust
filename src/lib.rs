@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
-pub mod types;
 pub mod constants;
+pub mod types;
 use core::panic;
 
 pub use types::*;
@@ -10,6 +10,8 @@ mod utilites;
 use utilites::*;
 
 use ureq;
+
+/// Joke standard struct.
 pub struct Joke<'a> {
     category: Vec<Category>,
     language: Language,
@@ -21,7 +23,8 @@ pub struct Joke<'a> {
     amount_of_jokes: AmountOfJokes,
 }
 
-impl <'a> Joke<'a> {
+impl<'a> Joke<'a> {
+    /// Create new instance of joke struct.
     pub fn new() -> Self {
         Self {
             category: vec![],
@@ -35,43 +38,51 @@ impl <'a> Joke<'a> {
         }
     }
 
+    /// Set language.
     pub fn language(&mut self, language: Language) -> &mut Self {
         self.language = language;
         self
     }
 
+    /// Set multiple flags as vec.
     pub fn flags(&mut self, flags: Vec<Flags>) -> &mut Self {
         self.flags = flags;
         self
     }
 
+    /// Set response format type.
     pub fn response_format(&mut self, response_format: Format) -> &mut Self {
         self.response_format = response_format;
         self
     }
 
+    /// Set joke type.
     pub fn joke_type(&mut self, joke_type: JokeType) -> &mut Self {
         self.joke_type = joke_type;
         self
     }
 
-    pub fn search_string(&mut self, search_string:&'a str ) -> &mut Self {
+    // Set optional search string.
+    pub fn search_string(&mut self, search_string: &'a str) -> &mut Self {
         self.search_string = Some(search_string);
         self
     }
 
+    /// Set optional id range.
     pub fn id_range(&mut self, id_range: IdRange) -> &mut Self {
         id_range.validate(&self.language);
         self.id_range = Some(id_range);
         self
     }
 
+    /// Set amount of jokes.
     pub fn amount_of_jokes(&mut self, amount_of_jokes: AmountOfJokes) -> &mut Self {
         amount_of_jokes.validate();
         self.amount_of_jokes = amount_of_jokes;
         self
     }
 
+    /// Build final struct.
     pub fn build(&mut self) -> JokeUrl {
         let mut joke_url = JokeUrl::get_url().0;
 
@@ -98,6 +109,7 @@ impl <'a> Joke<'a> {
     }
 }
 
+/// Joke url struct.
 pub struct JokeUrl(String);
 
 impl JokeUrl {
